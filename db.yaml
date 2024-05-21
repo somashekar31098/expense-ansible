@@ -26,4 +26,4 @@
     
   - name: print output
     ansible.bultin.debug:
-      msg: "output {{ mysql_connection_output }}"
+      msg: "output {{mysql_connection_output}}"
