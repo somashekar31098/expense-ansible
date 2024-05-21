@@ -1,5 +1,5 @@
 - name: db configure
-  hosts: web
+  hosts: db
   become: yes
   vars:
     login_host: db.daws1998.onlone
@@ -7,7 +7,7 @@
   - name: install mysql server
     ansible.builtin.dnf:
      name: mysql-server
-     state: installed
+     state: latest
 
   - name: enable and start mysqld
     ansible.builtin.service:
@@ -15,23 +15,22 @@
      state: started
      enable: yes
 
-  - name: create root password
+  - name: install python mysql dependencies
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cryptography
+      executable: pip3.9
+
+  - name: check db connection 
     community.mysql.mysql_info:
-      login_user: "{{ login user }}"
-      login_password: "{{ Login_password }}"
+      login_user: root
+      login_password: ExpenseApp@1
       login_host: "{{ login_host }}"
       filter: version
     ignore_errors: yes
     register: mysql_connection_output
   
-  - name: install python mysql dependencies
-    ansible.builtin.dnf:
-      name:
-      - pymysql
-      - cryptography
-      executable: pip3.9
-      
-
   - name: print output
     ansible.builtin.debug:
       msg: "output: {{mysql_connection_output}}"
