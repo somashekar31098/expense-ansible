@@ -14,7 +14,7 @@
      state: latest
 
   - name: enable and start mysqld
-    ansible.builtin.systemd:
+    ansible.builtin.service:
      name: mysqld
      state: started
      enable: yes
