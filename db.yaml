@@ -25,5 +25,5 @@
     register: mysql_connection_output
     
   - name: print output
-    ansible.bultin.debug:
+    ansible.builtin.debug:
       msg: "output: {{mysql_connection_output}}"
