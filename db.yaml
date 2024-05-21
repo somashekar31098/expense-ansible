@@ -23,7 +23,15 @@
       filter: version
     ignore_errors: yes
     register: mysql_connection_output
-    
+  
+  - name: install python mysql dependencies
+    ansible.builtin.dnf:
+      name:
+      - pymysql
+      - cryptography
+      executable: pip3.9
+      
+
   - name: print output
     ansible.builtin.debug:
       msg: "output: {{mysql_connection_output}}"
