@@ -4,6 +4,7 @@
   vars:
     login_host: db.daws1998.onlone
   vars_prompt:
+  - name: creating password
     mysql_root_password: ExpenseApp@1
     private: no
   tasks:
