@@ -4,8 +4,8 @@
   vars:
     login_host: db.daws1998.onlone
   vars_prompt:
-  - name: creating password
-    mysql_root_password: ExpenseApp@1
+  - name: mysql_root_password
+    prompt: ExpenseApp@1
     private: no
   tasks:
   - name: install mysql server
