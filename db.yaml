@@ -1,0 +1,29 @@
+- name: db configure
+  hosts: web
+  become: yes
+  vars:
+    login_host: db.daws1998.onlone
+  tasks:
+  - name: install mysql server
+    ansible.builtin.dnf:
+    name: mysql-server
+    state: installed
+
+  - name: enable and start mysqld
+    ansible.builtin.service:
+    name: mysqld
+    state: started
+    enable: yes
+
+  - name: create root password
+    community.mysql.mysql_info:
+      login_user: "{{ login user }}"
+      login_password: "{{ Login_password }}"
+      login_host: "{{ login_host }}"
+      filter: version
+    ignore errors: yes
+    register: mysql_connection_output
+    
+  - name: print output
+    ansible.bultin.debug:
+      msg: "output {{ mysql_connection_output }}"
