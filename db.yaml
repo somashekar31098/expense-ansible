@@ -5,7 +5,7 @@
     login_host: db.daws1998.online
   vars_prompt:
   - name: mysql_root_password
-    prompt: ExpenseApp@1
+    prompt: Please enter mysql root password
     private: no
   tasks:
   - name: install mysql server
