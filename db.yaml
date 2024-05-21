@@ -6,14 +6,14 @@
   tasks:
   - name: install mysql server
     ansible.builtin.dnf:
-    name: mysql-server
-    state: installed
+     name: mysql-server
+     state: installed
 
   - name: enable and start mysqld
     ansible.builtin.service:
-    name: mysqld
-    state: started
-    enable: yes
+     name: mysqld
+     state: started
+     enable: yes
 
   - name: create root password
     community.mysql.mysql_info:
