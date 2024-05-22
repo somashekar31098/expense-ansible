@@ -2,44 +2,43 @@
   become: yes
   hosts: backend
   vars:
-    login_password: ExpenseApp@1
     login_host: db.daws1998.online
-  
+    login_password: ExpenseApp@1
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
 
-  - name: enable nodejs
+  - name: enable nodejs:20
     ansible.builtin.command: dnf module enable nodejs:20 -y
 
   - name: install nodejs
-    ansible.builtin.dnf:
+    ansible.builtin.dnf: # only works for Redhat family
       name: "{{ item }}"
       state: installed
     loop:
     - nodejs
     - mysql
-  
+
   - name: create expense user
     ansible.builtin.user:
       name: expense
 
-  - name: create directory
+  - name: create app directory
     ansible.builtin.file:
       path: /app
-      state: "directory"
-  
+      state: directory
+
   - name: download backend code
     ansible.builtin.get_url:
-       url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-       dest: /tmp/backend.zip
-      
-  - name: unzip code
+      url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+      dest: /tmp/backend.zip
+
+  - name: unzip backend code
     ansible.builtin.unarchive:
-      src: /tmp/backend.zip
+      src: /tmp/backend.zip # by default checks in ansible server
       dest: /app
       remote_src: yes
-  
+
   - name: install npm dependencies
     ansible.builtin.command: npm install
     args:
@@ -51,11 +50,11 @@
       dest: /etc/systemd/system/backend.service
 
   - name: install python mysql dependencies
-    ansible.builtin.pip:
+    ansible.builtin.pip: 
       name:
-      - PyMySQL
+      - PyMySQL # to connect MySQL DB from Ansible
       - cryptography
-      executable: pip3.9
+      executable: pip3.9 # pip3.11 if python version is 3.11
 
   - name: import data into mysql
     community.mysql.mysql_db:
@@ -66,10 +65,9 @@
       state: import
       name: all
 
-  - name: daemon realod
+  - name: daemon reload
     ansible.builtin.systemd_service:
       daemon_reload: true
-      name: backend
 
   - name: start and enable backend service
     ansible.builtin.service:
