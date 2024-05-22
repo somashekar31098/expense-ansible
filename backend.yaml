@@ -78,7 +78,7 @@
       
   - name: unmasking backend service
     ansible.builtin.systemd_service:
-      name: backend
+      name: backend.service
       enabled: true
       masked: no
 
