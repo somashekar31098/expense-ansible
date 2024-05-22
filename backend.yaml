@@ -1,6 +1,9 @@
 - name: configure backend server
   become: yes
   hosts: backend
+  vars:
+    login_password: ExpenseApp@1
+    login_host: db.daws1998.online
   
   tasks:
   - name: disable default nodejs
@@ -33,3 +36,29 @@
       src: /tmp/backend.zip
       dest: /app
       remote_src: yes
+  
+  - name: install npm dependencies
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+
+  - name: copy backend service
+    ansible.builtin.copy:
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
+
+  - name: install python mysql dependencies
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cryptography
+      executable: pip3.9
+
+  - name: 
+    community.mysql.mysql_db:
+      login_user: root
+      login_password: "{{login_password}}"
+      login_host: "{{ login_host }}"
+      taregt: /app/schema/backend.sql
+      state: import
+      
