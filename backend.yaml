@@ -61,5 +61,4 @@
       login_host: "{{ login_host }}"
       taregt: /app/schema/backend.sql
       state: import
-      args:
-        name: all
+      name: all
